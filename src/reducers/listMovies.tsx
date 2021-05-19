@@ -1,12 +1,13 @@
 import { GET_MOVIES, GET_MOVIES_SUCCESS, GET_MOVIES_ERROR } from '../actions/actionTypes'
-import MovieTrend from '../interfaces/movieTrendModel'
 const initState: IMovieState = {
     loading: false,
-    listMoviesTrend: []
+    listMoviesTrend: [],
+    listMoviesPopular: [],
+    listTVPopular: []
 };
 interface action {
     type: string,
-    payload: object
+    payload: Array<object>
 }
 const ListMovies = (data = initState, action: action) => {
 
@@ -19,11 +20,12 @@ const ListMovies = (data = initState, action: action) => {
             }
         }
         case GET_MOVIES_SUCCESS: {
-            console.log('get success');
             return {
                 ...data,
                 loading: false,
-                listMoviesTrend: action.payload
+                listMoviesTrend: action.payload[0],
+                listMoviesPopular: action.payload[1],
+                listTVPopular: action.payload[2]
             }
         }
         case GET_MOVIES_ERROR: {

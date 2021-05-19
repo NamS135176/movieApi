@@ -5,16 +5,10 @@ import MoviesCom from './MoviesCom'
 import TVCom from './TVCom'
 import ProfileCom from './ProfileCom'
 import {useDispatch, useSelector} from 'react-redux'
-import {getMovies} from '../actions/actions'
 import { GET_MOVIES } from '../actions/actionTypes';
-import MovieTrend from '../interfaces/movieTrendModel'
 
 const Tab = createBottomTabNavigator();
 
-interface listMovie {
-    loading: boolean,
-    listMovieTrend: Array<MovieTrend>
-  }
 export default function MainScreen() {
     const dispatch = useDispatch();
     const listMovie: IMovieState = useSelector((state: IAllState) => state.movies)
@@ -22,13 +16,10 @@ export default function MainScreen() {
         dispatch({
             type:GET_MOVIES,
             payload: []
-        })
-
-       
-       
+        })     
     },[])
 
-    console.log(listMovie.listMoviesTrend);
+    
     return (
         <Tab.Navigator
         screenOptions={({ route }) => ({

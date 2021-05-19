@@ -5,17 +5,25 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Onboarding from 'react-native-onboarding-swiper';
 import AppIntroSlider from "react-native-app-intro-slider";
 import AsyncStorage from '@react-native-community/async-storage';
-import LoginCom from './components/LoginCom'
-import SignUpCom from './components/SignUpCom'
-import MainScreen from './components/MainScreen'
+import LoginCom from './src/components/LoginCom'
+import SignUpCom from './src/components/SignUpCom'
+import MainScreen from './src/components/MainScreen'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import createSagaMiddleware from 'redux-saga'
-import moviesSaga from './sagas/moviesSaga'
-import allReducer from './reducers/allReducers'
+import moviesSaga from './src/sagas/moviesSaga'
+import allReducer from './src/reducers/allReducers'
+import { persistStore, persistReducer } from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react'
 
+const persistConfig = {
+  key: 'root',
+  storage: AsyncStorage
+}
+
+const persistedReducer = persistReducer(persistConfig, allReducer)
 const sagaMiddleware = createSagaMiddleware()
-const store = createStore(allReducer, applyMiddleware(sagaMiddleware))
+const store = createStore(persistedReducer, applyMiddleware(sagaMiddleware))
 sagaMiddleware.run(moviesSaga)
 
 const slides = [
@@ -24,21 +32,21 @@ const slides = [
     title: "JUST TRAVEL",
     text:
       "Lorem ipsum dolor sit amet consecte tuer adipsing elit sed diam monum my nibh eusimod eltor",
-    image: require("./images/02.png"),
+    image: require("./src/images/02.png"),
   },
   {
     key: "two",
     title: "TAKE A BREAK",
     text:
       "Lorem ipsum dolor sit amet consecte tuer adipsing elit sed diam monum my nibh eusimod eltor",
-    image: require("./images/03.png"),
+    image: require("./src/images/03.png"),
   },
   {
     key: "three",
     title: "ENJOY YOUR JOURNEY",
     text:
       "Lorem ipsum dolor sit amet consecte tuer adipsing elit sed diam monum my nibh eusimod eltor",
-    image: require("./images/04.png"),
+    image: require("./src/images/04.png"),
   },
 ];
 
@@ -95,8 +103,6 @@ function HomeScreen({ navigation }) {
         <View style={{ flex: 1 }}>
           <LoginCom ></LoginCom>
         </View>
-    
-
     );
   }
 }
@@ -111,7 +117,7 @@ function Splash({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <Image
-        source={require("./images/01.png")}
+        source={require("./src/images/01.png")}
         style={{
           resizeMode: "cover",
           height: "100%",

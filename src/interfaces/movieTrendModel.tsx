@@ -1,5 +1,6 @@
 export default interface MovieTrend {
     id: number,
+    backdrop_path:string;
     original_language: string,
     original_title: string,
     overview: string,
