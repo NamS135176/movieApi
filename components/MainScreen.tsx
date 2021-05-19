@@ -1,25 +1,34 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { Text, View, Icon} from 'native-base'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MoviesCom from './MoviesCom'
 import TVCom from './TVCom'
 import ProfileCom from './ProfileCom'
+import {useDispatch, useSelector} from 'react-redux'
+import {getMovies} from '../actions/actions'
+import { GET_MOVIES } from '../actions/actionTypes';
+import MovieTrend from '../interfaces/movieTrendModel'
+
 const Tab = createBottomTabNavigator();
-function DetailsScreen() {
-    return (
-      <View style={{ flex: 1 }}>
-       <Text>Details</Text>
-      </View>
-    );
-  }
-  function User() {
-    return (
-      <View style={{ flex: 1 }}>
-       <Text>Users</Text>
-      </View>
-    );
+
+interface listMovie {
+    loading: boolean,
+    listMovieTrend: Array<MovieTrend>
   }
 export default function MainScreen() {
+    const dispatch = useDispatch();
+    const listMovie: IMovieState = useSelector((state: IAllState) => state.movies)
+    useEffect(() => {
+        dispatch({
+            type:GET_MOVIES,
+            payload: []
+        })
+
+       
+       
+    },[])
+
+    console.log(listMovie.listMoviesTrend);
     return (
         <Tab.Navigator
         screenOptions={({ route }) => ({
@@ -47,9 +56,6 @@ export default function MainScreen() {
           <Tab.Screen name="MOVIES" children={() => <MoviesCom ></MoviesCom>} />
           <Tab.Screen name="TV" children={() => <TVCom></TVCom>} />
           <Tab.Screen name="Profile" children={() => <ProfileCom></ProfileCom>} />
-        {/* <Tab.Screen name="News" children={() => <NewsScreen data={data} nav={navigation}></NewsScreen>} />
-        <Tab.Screen name="User" children={() => <ReplaceUserScreen user={user} postCount={userPostCount} totalLike={totalLikeCount}></ReplaceUserScreen>} /> */}
-        {/* <Tab.Screen name="User" children={() => <UserScreen user={user} postCount={userPostCount} totalLike={totalLikeCount}></UserScreen>} /> */}
       </Tab.Navigator>
     )
 }

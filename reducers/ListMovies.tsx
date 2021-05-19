@@ -1,42 +1,40 @@
-import {GET_MOVIES, GET_MOVIES_SUCCESS, GET_MOVIES_ERROR} from '../actions/actionTypes'
-const initState = {
+import { GET_MOVIES, GET_MOVIES_SUCCESS, GET_MOVIES_ERROR } from '../actions/actionTypes'
+import MovieTrend from '../interfaces/movieTrendModel'
+const initState: IMovieState = {
     loading: false,
-    listMoivesTrend: [],
-    listMoviesPop:[],
-    listTVTrend:[],
-    listTVPop:[],
-    error: 'none'
+    listMoviesTrend: []
 };
 interface action {
     type: string,
-    payload: any
-  }
-const ListMovies = (data = initState, action:action) => {
-    switch(action.type){
-        case GET_MOVIES : {
-            return{
-               ...data,
-                loading:true
+    payload: object
+}
+const ListMovies = (data = initState, action: action) => {
+
+
+    switch (action.type) {
+        case GET_MOVIES: {
+            return {
+                ...data,
+                loading: true
             }
         }
-        case GET_MOVIES_SUCCESS : {
-            return{
+        case GET_MOVIES_SUCCESS: {
+            console.log('get success');
+            return {
                 ...data,
                 loading: false,
-                listMoviesTrend: action.payload.listMoviesTrend,
-                listMoviesPop: action.payload.listMoviesPop,
-                listTVTrend: action.payload.listTVTrend,
-                listTVPop: action.payload.listTVPop
+                listMoviesTrend: action.payload
             }
         }
-        case GET_MOVIES_ERROR : {
-            return{
+        case GET_MOVIES_ERROR: {
+            return {
                 ...data,
-                loading:false,
-                error: action.payload.error
+                loading: false
             }
         }
-        default: return initState
+        default:{
+            return initState
+        } 
     }
 }
 export default ListMovies

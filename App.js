@@ -8,6 +8,16 @@ import AsyncStorage from '@react-native-community/async-storage';
 import LoginCom from './components/LoginCom'
 import SignUpCom from './components/SignUpCom'
 import MainScreen from './components/MainScreen'
+import { createStore, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
+import createSagaMiddleware from 'redux-saga'
+import moviesSaga from './sagas/moviesSaga'
+import allReducer from './reducers/allReducers'
+
+const sagaMiddleware = createSagaMiddleware()
+const store = createStore(allReducer, applyMiddleware(sagaMiddleware))
+sagaMiddleware.run(moviesSaga)
+
 const slides = [
   {
     key: "one",
@@ -66,43 +76,48 @@ function HomeScreen({ navigation }) {
   };
   if (isFirstTime) {
     return (
-      <View style={{ flex: 1 }}>
-        <AppIntroSlider
-          renderItem={_renderItem}
-          data={slides}
-          onDone={() => {
-            navigation.navigate('Details')
-          }}
-        />
-      </View>
+     
+        <View style={{ flex: 1 }}>
+          <AppIntroSlider
+            renderItem={_renderItem}
+            data={slides}
+            onDone={() => {
+              navigation.navigate('Details')
+            }}
+          />
+        </View>
+     
     );
   }
   else {
     return (
-      <View style={{ flex: 1 }}>
-      <LoginCom ></LoginCom>
-      </View>
+    
+        <View style={{ flex: 1 }}>
+          <LoginCom ></LoginCom>
+        </View>
+    
+
     );
   }
 }
 
 
-function Splash({navigation}) {
+function Splash({ navigation }) {
   useEffect(() => {
     setTimeout(() => {
       navigation.navigate('Home')
-    },1000)
+    }, 1000)
   })
   return (
     <View style={{ flex: 1 }}>
-       <Image
-          source={require("./images/01.png")}
-          style={{
-            resizeMode: "cover",
-            height: "100%",
-            width: "100%",
-          }}
-        />
+      <Image
+        source={require("./images/01.png")}
+        style={{
+          resizeMode: "cover",
+          height: "100%",
+          width: "100%",
+        }}
+      />
     </View>
   );
 }
@@ -111,15 +126,17 @@ const Stack = createStackNavigator();
 
 function App() {
   return (
-    <NavigationContainer>
+   <Provider store={store}>
+      <NavigationContainer>
       <Stack.Navigator initialRouteName="Splash">
-        <Stack.Screen name="Splash" component={Splash} options={{headerShown:false}} />
+        <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Details" component={LoginCom} options={{ headerShown:false }} />
-        <Stack.Screen name="SignUp" component={SignUpCom} options={{headerShown:false}} />
-        <Stack.Screen name="Main" component={MainScreen} options={{headerShown:false}} />
+        <Stack.Screen name="Details" component={LoginCom} options={{ headerShown: false }} />
+        <Stack.Screen name="SignUp" component={SignUpCom} options={{ headerShown: false }} />
+        <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
+   </Provider>
   );
 }
 
